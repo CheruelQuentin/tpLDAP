@@ -2,10 +2,11 @@ const path= require('path')
 const express = require("express")
 const hbs = require('hbs')
 const app = express()
+const {spawn} = require('child_process')
 var bodyParser = require("body-parser")
 
 const port = process.env.PORT || 3000
-const publicDirectoryPath = path.join(path.join(__dirname, '../public'))
+const publicDirectoryPath = path.join(path.join(__dirname, '/public'))
 const viewsPath = path.join(__dirname, '../code/templates/views')
 const partialsPath = path.join(__dirname,'../code/templates/partials')
 const connectUser = require('./utils/connectUser.js')
@@ -19,8 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', function (req, res) {
   res.render('index');
 });
-
-
 
 app.post('/waiting',function (req, res) {
   const username = req.body.username
@@ -53,6 +52,27 @@ app.post('/waiting',function (req, res) {
     }   
   }
 })
+
+app.get('/ftp', function (req, res) {
+  res.render('index');
+});
+
+app.get('/smtp', function (req, res) {
+  const python = spawn('python3',['./serverSMTP/main.py'])
+  var dataToSend;
+  python.stdout.on('data', function (data){
+    dataToSend = data.toString();
+  });
+
+  python.stderr.on('data', data => {
+    console.error(`stderr: ${dataToSend}`)
+  })
+
+  python.on('exit',code => {
+    console.log(`child process exited with code ${code}, ${dataToSend}`);
+  })
+
+});
 
 
 app.listen(port,()=>{
