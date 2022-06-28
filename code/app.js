@@ -58,14 +58,16 @@ app.get('/ftp', function (req, res) {
 });
 
 app.get('/smtp', function (req, res) {
-  const python = spawn('python3',['./serverSMTP/main.py'])
   var dataToSend;
+  const python = spawn('python',['../serverSMTP/main.py'])
+
+
   python.stdout.on('data', function (data){
     dataToSend = data.toString();
   });
 
   python.stderr.on('data', data => {
-    console.error(`stderr: ${dataToSend}`)
+    console.error(`stderr: ${data.toString('utf8')}`)
   })
 
   python.on('exit',code => {
