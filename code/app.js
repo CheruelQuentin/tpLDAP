@@ -54,7 +54,21 @@ app.post('/waiting',function (req, res) {
 })
 
 app.get('/ftp', function (req, res) {
-  res.render('index');
+  var dataToSend;
+  const python = spawn('python',['../serverFTP/main.py'])
+
+
+  python.stdout.on('data', function (data){
+    dataToSend = data.toString();
+  });
+
+  python.stderr.on('data', data => {
+    console.error(`stderr: ${data.toString('utf8')}`)
+  })
+
+  python.on('exit',code => {
+    console.log(`child process exited with code ${code}, ${dataToSend}`);
+  })
 });
 
 app.get('/smtp', function (req, res) {
