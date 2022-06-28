@@ -1,0 +1,1 @@
+in serverLDAP run npm start on your terminal
