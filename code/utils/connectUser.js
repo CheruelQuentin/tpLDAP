@@ -8,7 +8,7 @@ const connectUser = (username, password) => {
   username = username.trim().toLowerCase()
   password = password.trim().toLowerCase()
   
-  if(password == "quentin"){
+  if(password == "quentin" ){
     role = 1
     return role
   } else if(password == "loïc") {

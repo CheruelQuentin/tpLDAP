@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 
 
-app.post('/waitingPage',function (req, res) {
+app.post('/waiting',function (req, res) {
   const username = req.body.username
   const password = req.body.password
 
@@ -33,7 +33,9 @@ app.post('/waitingPage',function (req, res) {
   } else {
     switch (connectUser(username, password)) {
       case 0:
-        res.render('index');
+        return res.send({ 
+          error : "username or password errors"
+        })
         break;
       case 1 :
         res.render('waiting');
