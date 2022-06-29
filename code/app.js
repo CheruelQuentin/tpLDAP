@@ -37,13 +37,22 @@ app.post('/waiting',function (req, res) {
         })
         break;
       case 1 :
-        res.render('waiting');
+        res.render('waiting',{
+          username : username,
+          password : password
+        });
         break;
       case 2 : 
-        res.render('waiting');
+        res.render('waiting',{
+          username : username,
+          password : password
+        });
         break;
       case 3:
-        res.render('waiting');
+        res.render('waiting',{
+          username : username,
+          password : password
+        });
         break;
       default:
         return res.send({ 
@@ -57,7 +66,6 @@ app.get('/ftp', function (req, res) {
   var dataToSend;
   const python = spawn('python',['../serverFTP/main.py'])
 
-
   python.stdout.on('data', function (data){
     dataToSend = data.toString();
   });
@@ -69,6 +77,7 @@ app.get('/ftp', function (req, res) {
   python.on('exit',code => {
     console.log(`child process exited with code ${code}, ${dataToSend}`);
   })
+
 });
 
 app.get('/smtp', function (req, res) {
