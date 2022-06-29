@@ -21,3 +21,4 @@ SUBJECT = sys.argv[4]
 TEXT = sys.argv[5]
 message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
 mailserver.sendmail(login, receiver, message)
+print("Mail envoyé")

@@ -106,6 +106,7 @@ app.post('/sendMail', function (req, res) {
 
   python.stdout.on('data', function (data){
     dataToSend = data.toString();
+    res.render('sendMail')
   });
 
   python.stderr.on('data', data => {
