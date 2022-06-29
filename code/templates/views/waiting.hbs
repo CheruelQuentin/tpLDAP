@@ -1,15 +1,34 @@
 <head>
   <title>tpLDAP</title>
   <link rel="stylesheet" href="css/styles.min.css">
-
+</head>
 <body>
   <div class="centered-form">
-    <div class="centered-form__box">
-      <h1>Check your log after clicking on button</h1>
-      <a href="/ftp" style="margin-bottom:2px;">ftp</a>
-      {{username}} : {{password}}
-      <br>
-      <a href="/smtp">smtp</a>
-    </div>
+    {{#if admin }}
+      <div class="centered-form__box">
+            <form method="post" action="/ftp">
+                <input type="text" name="username" placeholder="username" id="username"  value={{username}} hidden>
+                <input type="password" name="password" placeholder='password' id="password" value={{password}} hidden>
+                <button type="submit">FTP</button>
+            </form>
+        <br>
+        <a href="/smtp">smtp</a>
+      </div>
+    {{/if}}
+    {{#if mailer}}
+      <div class="centered-form__box">
+        <a href="/smtp">smtp</a>
+      </div>
+    {{/if}}
+    {{#if ftp}}
+      <div class="centered-form__box">
+            <form method="post" action="/ftp">
+                <input type="text" name="username" placeholder="username" id="username"  value={{username}} hidden>
+                <input type="password" name="password" placeholder='password' id="password" value={{password}} hidden>
+                <button type="submit">FTP</button>
+            </form>
+        <br>
+      </div>
+  {{/if}}
   </div>
 </body> 

@@ -24,7 +24,6 @@ app.get('/', function (req, res) {
 app.post('/waiting',function (req, res) {
   const username = req.body.username
   const password = req.body.password
-
   if (password == undefined || username == undefined) { 
     return res.send({ 
       error : "you must a username"
@@ -39,19 +38,30 @@ app.post('/waiting',function (req, res) {
       case 1 :
         res.render('waiting',{
           username : username,
-          password : password
+          password : password,
+          admin : true,
+          mailer : false,
+          ftp : false 
         });
         break;
       case 2 : 
+ 
         res.render('waiting',{
           username : username,
-          password : password
+          password : password,
+          admin : false,
+          mailer : true,
+          ftp : false
         });
         break;
       case 3:
+
         res.render('waiting',{
           username : username,
-          password : password
+          password : password,
+          admin : false,
+          mailer : false,
+          ftp : true
         });
         break;
       default:
@@ -62,9 +72,37 @@ app.post('/waiting',function (req, res) {
   }
 })
 
-app.get('/ftp', function (req, res) {
+app.post('/ftp', function (req, res) {
+  const username = req.body.username
+  const password = req.body.password
+
   var dataToSend;
-  const python = spawn('python',['../serverFTP/main.py'])
+  const python = spawn('python',['../serverFTP/main.py',username,password])
+
+  python.stdout.on('data', function (data){
+    dataToSend = data.toString();
+  });
+
+  python.stderr.on('data', data => {
+    console.error(`stderr: ${data.toString('utf8')}`)
+  })
+
+  python.on('exit',code => {
+    console.log(`child process exited with code ${code}, ${dataToSend}`);
+  })
+
+});
+
+app.post('/sendMail', function (req, res) {
+  const username = req.body.username
+  const password = req.body.password
+  const destinataire = req.body.destinataire
+  const sujet = req.body.sujet
+  const texte = req.body.texte
+  
+  var dataToSend;
+  const python = spawn('python',['../serverSMTP/main.py',username,password,destinataire,sujet,texte])
+
 
   python.stdout.on('data', function (data){
     dataToSend = data.toString();
@@ -81,24 +119,8 @@ app.get('/ftp', function (req, res) {
 });
 
 app.get('/smtp', function (req, res) {
-  var dataToSend;
-  const python = spawn('python',['../serverSMTP/main.py'])
-
-
-  python.stdout.on('data', function (data){
-    dataToSend = data.toString();
-  });
-
-  python.stderr.on('data', data => {
-    console.error(`stderr: ${data.toString('utf8')}`)
-  })
-
-  python.on('exit',code => {
-    console.log(`child process exited with code ${code}, ${dataToSend}`);
-  })
-
+  res.render('smtp');
 });
-
 
 app.listen(port,()=>{
   console.log('Server listening on port' + port)
