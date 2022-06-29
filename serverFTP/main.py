@@ -1,7 +1,7 @@
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
-
+import sys
 import os
 #
 #PATH = "D:\\ftp"
@@ -9,7 +9,11 @@ import os
 
 addr = ('127.0.0.1', 21)
 authorizer = DummyAuthorizer()
-authorizer.add_user("epsi","client22",".", perm="elradfmw")
+login = sys.argv[1]
+psw = sys.argv[2]
+print("login"+login+", psw " + psw )
+
+authorizer.add_user(login,psw,".", perm="elradfmw")
 
 handler = FTPHandler
 handler.authorizer = authorizer
